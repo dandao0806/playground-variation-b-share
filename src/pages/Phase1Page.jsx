@@ -828,7 +828,17 @@ export default function Phase1Page() {
     setPreviousCommittedSelections(defaultSelections)
   }
 
-  const priceDisplay = isPending ? '$—' : `$${committedMonthly.toFixed(2)}`
+  // Term-aware pricing. 12-month monthly = 6-month monthly * TERM_MULT so
+  // switching term updates every price display and the sheet's card totals.
+  // Multiplier chosen to reproduce the design's $89 → $115 ratio.
+  const TERM_MULT = { '6 month': 1, '12 month': 1.2921348 }
+  const termMonths = policyTerm === '6 month' ? 6 : 12
+  const pricesByTerm = {
+    '6 month': committedMonthly * TERM_MULT['6 month'],
+    '12 month': committedMonthly * TERM_MULT['12 month'],
+  }
+  const termMonthly = pricesByTerm[policyTerm]
+  const priceDisplay = isPending ? '$—' : `$${termMonthly.toFixed(2)}`
   const ctaTopLabel = isPending ? 'Recalculate' : 'Looks good, continue'
   const ctaBottomLabel = isPending ? 'Recalculate' : 'Continue'
   const ctaOnClick = isPending ? handleRecalculate : undefined
@@ -886,16 +896,16 @@ export default function Phase1Page() {
 
           <Phase1TierPills selected={selectedTier} onSelect={handleSelectTier} />
 
-          {/* Payment plan block. Numbers derived from committedMonthly so the
-              flow stays coherent with the pending / recalculate behaviour. */}
+          {/* Payment plan block. Numbers derived from termMonthly + termMonths
+              so switching the policy term updates every displayed number. */}
           {(() => {
-            const monthly = committedMonthly
-            const total6 = monthly * 6
+            const monthly = termMonthly
+            const total = monthly * termMonths
             const payToday = monthly * 2
-            const monthlyOfFive = monthly
+            const remainingPayments = termMonths - 2
             const payInFullDiscountPct = 0.15
-            const payInFull = total6 * (1 - payInFullDiscountPct)
-            const savings = total6 - payInFull
+            const payInFull = total * (1 - payInFullDiscountPct)
+            const savings = total - payInFull
             const fmt = (n) =>
               n.toLocaleString('en-US', {
                 minimumFractionDigits: 2,
@@ -906,15 +916,15 @@ export default function Phase1Page() {
                 <div className="phase1-payment-topline">
                   <span className="phase1-payment-bold">Pay monthly</span>
                   <span className="phase1-payment-muted">
-                    (Total of {fmt(total6)})
+                    (Total of {fmt(total)})
                   </span>
                 </div>
                 <div className="phase1-payment-schedule">
-                  Pay ${fmt(payToday)} today then 5 monthly payments of
+                  Pay ${fmt(payToday)} today then {remainingPayments} monthly payments of
                 </div>
                 <div className={`phase1-big-price ${isPending ? 'pending' : ''} ${bouncing ? 'bouncing' : ''}`}>
                   <span className="phase1-big-price-value">
-                    ${fmt(monthlyOfFive)}
+                    ${fmt(monthly)}
                   </span>
                 </div>
                 <div className="phase1-payment-savings">
@@ -1071,6 +1081,7 @@ export default function Phase1Page() {
     <TermSwitchSheet
       open={termSheetOpen}
       current={policyTerm}
+      prices={pricesByTerm}
       onSelect={(id) => {
         setPolicyTerm(id)
         setTermSheetOpen(false)

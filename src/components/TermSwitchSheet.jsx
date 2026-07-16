@@ -8,18 +8,22 @@ const OPTIONS = [
   {
     id: '6 month',
     title: '6 months coverage',
-    price: '$89',
     subtitle: 'Flexible and cheaper',
   },
   {
     id: '12 month',
     title: '12 months coverage',
-    price: '$115',
     subtitle: 'Lock in rates for stability',
   },
 ]
 
-export default function TermSwitchSheet({ open, current, onSelect, onClose }) {
+const fmtPrice = (n) =>
+  `$${n.toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`
+
+export default function TermSwitchSheet({ open, current, prices, onSelect, onClose }) {
   useEffect(() => {
     if (!open) return
     const onKey = (e) => {
@@ -68,7 +72,7 @@ export default function TermSwitchSheet({ open, current, onSelect, onClose }) {
                   <div className="pr-sheet-card-header">
                     <span className="pr-sheet-card-title">{opt.title}</span>
                     <span className="pr-sheet-card-price">
-                      <strong>{opt.price}</strong>
+                      <strong>{fmtPrice(prices[opt.id])}</strong>
                       <span className="pr-sheet-card-price-unit">/mo</span>
                     </span>
                   </div>
