@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
 // Two-option bottom sheet for switching policy term. Rendered inside the
 // mobile shell frame so it slides in from the bottom of the phone view.
@@ -26,13 +26,34 @@ const fmtPrice = (n) =>
   })}`
 
 export default function TermSwitchSheet({ open, current, prices, onSelect, onClose }) {
+  const sheetRef = useRef(null)
+  const returnFocusRef = useRef(null)
+
+  // Escape to close, plus focus management: remember what had focus before
+  // the sheet opened, move focus into the sheet, and restore on close so
+  // keyboard/screen-reader users don't lose their place.
   useEffect(() => {
-    if (!open) return
-    const onKey = (e) => {
-      if (e.key === 'Escape') onClose()
+    if (open) {
+      returnFocusRef.current = document.activeElement
+      // Focus the primary CTA (first non-current card's Switch button)
+      const primary = sheetRef.current?.querySelector(
+        '.pr-sheet-card:not(.is-current) .pr-sheet-card-btn',
+      )
+      const fallback = sheetRef.current?.querySelector('button')
+      ;(primary || fallback)?.focus({ preventScroll: true })
+
+      const onKey = (e) => {
+        if (e.key === 'Escape') onClose()
+      }
+      window.addEventListener('keydown', onKey)
+      return () => window.removeEventListener('keydown', onKey)
     }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
+
+    // Closing: restore focus if we captured something previously.
+    if (returnFocusRef.current && typeof returnFocusRef.current.focus === 'function') {
+      returnFocusRef.current.focus()
+    }
+    returnFocusRef.current = null
   }, [open, onClose])
 
   return (
@@ -43,6 +64,7 @@ export default function TermSwitchSheet({ open, current, prices, onSelect, onClo
         aria-hidden={!open}
       />
       <div
+        ref={sheetRef}
         className={`pr-sheet ${open ? 'open' : ''}`}
         role="dialog"
         aria-modal="true"
@@ -67,6 +89,7 @@ export default function TermSwitchSheet({ open, current, prices, onSelect, onClo
                 <div
                   key={opt.id}
                   className={`pr-sheet-card ${isCurrent ? 'is-current' : ''}`}
+                  aria-current={isCurrent ? 'true' : undefined}
                 >
                   {isCurrent && (
                     <div className="pr-sheet-current-tag">Current policy</div>

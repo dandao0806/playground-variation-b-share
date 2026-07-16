@@ -902,7 +902,7 @@ export default function Phase1Page() {
             const monthly = termMonthly
             const total = monthly * termMonths
             const payToday = monthly * 2
-            const remainingPayments = termMonths - 2
+            const remainingPayments = termMonths - 1
             const payInFullDiscountPct = 0.15
             const payInFull = total * (1 - payInFullDiscountPct)
             const savings = total - payInFull

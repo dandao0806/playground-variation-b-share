@@ -4472,4 +4472,12 @@ button.welcome-card--link { background: var(--color-surface); }
   border-color: var(--color-primary);
 }
 
+/* Respect user motion preference: snap open/closed instead of animating. */
+@media (prefers-reduced-motion: reduce) {
+  .pr-sheet,
+  .pr-sheet-backdrop {
+    transition: none;
+  }
+}
+
 
