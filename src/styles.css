@@ -4290,4 +4290,169 @@ button.welcome-card--link { background: var(--color-surface); }
   }
 }
 
+/* ============================================================
+   Bottom sheet — policy term switcher
+   ============================================================
+   Backdrop and sheet are absolutely positioned inside .pr-frame so
+   they stay within the mock phone frame on desktop and fill the
+   shell on real mobile. The sheet width tracks .pr-shell (max 390px,
+   with 24px gutters below that width). */
+
+.pr-sheet-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 120, 214, 0.25);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 240ms cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 900;
+}
+.pr-sheet-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.pr-sheet {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: min(390px, calc(100% - 48px));
+  transform: translate(-50%, 100%);
+  transition: transform 340ms cubic-bezier(0.16, 1, 0.3, 1);
+  background: #ffffff;
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -10px 32px rgba(0, 0, 0, 0.16);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  max-height: 90%;
+  overflow: hidden;
+  will-change: transform;
+}
+.pr-sheet.open {
+  transform: translate(-50%, 0);
+}
+
+.pr-sheet-grabber {
+  align-self: center;
+  width: 36px;
+  height: 4px;
+  border-radius: 999px;
+  background: #c9ced4;
+  margin: 8px 0 4px;
+}
+
+.pr-sheet-body {
+  padding: 12px 20px 24px;
+  overflow-y: auto;
+}
+
+.pr-sheet-title {
+  font-family: 'Manrope', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 28px;
+  color: var(--color-text);
+  margin: 4px 0 6px;
+}
+.pr-sheet-subtitle {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 15px;
+  line-height: 22px;
+  color: #656565;
+  margin: 0 0 18px;
+}
+
+.pr-sheet-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.pr-sheet-card {
+  position: relative;
+  border: 1px solid #e0e3e7;
+  border-radius: 12px;
+  padding: 16px 16px 14px;
+  background: #ffffff;
+}
+.pr-sheet-card.is-current {
+  background: var(--prcins-primary-50);
+  border-color: var(--prcins-primary-100);
+}
+.pr-sheet-current-tag {
+  position: absolute;
+  top: -12px;
+  left: 14px;
+  padding: 4px 12px;
+  background: var(--prcins-primary-100);
+  color: var(--color-primary);
+  border-radius: 999px;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  letter-spacing: 0.1px;
+}
+
+.pr-sheet-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+.pr-sheet-card-title {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 24px;
+  color: var(--color-text);
+}
+.pr-sheet-card-price {
+  font-family: 'Open Sans', sans-serif;
+  color: var(--color-text);
+  white-space: nowrap;
+}
+.pr-sheet-card-price strong {
+  font-size: 18px;
+  font-weight: 700;
+}
+.pr-sheet-card-price-unit {
+  font-size: 13px;
+  color: #656565;
+  margin-left: 1px;
+}
+.pr-sheet-card-sub {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  color: #656565;
+  margin: 0 0 14px;
+}
+
+.pr-sheet-card-btn {
+  appearance: none;
+  width: 100%;
+  padding: 12px 16px;
+  border: 1.5px solid var(--color-primary);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-primary);
+  font-family: 'Open Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 20px;
+  cursor: pointer;
+  transition: background 160ms ease;
+}
+.pr-sheet-card-btn:hover {
+  background: var(--prcins-primary-50);
+}
+.pr-sheet-card-btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
 
