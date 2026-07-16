@@ -13,8 +13,8 @@ const OPTIONS = [
   },
   {
     id: '12 month',
-    title: 'Annual coverage',
-    shortLabel: 'Annual',
+    title: 'annual coverage',
+    shortLabel: 'annual',
     subtitle: 'Lock in rates for stability',
   },
 ]

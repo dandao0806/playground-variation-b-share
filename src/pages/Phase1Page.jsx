@@ -870,7 +870,7 @@ export default function Phase1Page() {
               className="pr-policy-term-select"
               onClick={() => setTermSheetOpen(true)}
             >
-              <span className="pr-policy-term-value">{policyTerm === '12 month' ? 'Annual' : policyTerm}</span>
+              <span className="pr-policy-term-value">{policyTerm === '12 month' ? 'annual' : policyTerm}</span>
               <svg
                 className="pr-policy-term-chevron"
                 width="14"
