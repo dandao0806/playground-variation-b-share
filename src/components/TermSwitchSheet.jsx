@@ -8,11 +8,13 @@ const OPTIONS = [
   {
     id: '6 month',
     title: '6 months coverage',
+    shortLabel: '6 months',
     subtitle: 'Flexible and cheaper',
   },
   {
     id: '12 month',
-    title: '12 months coverage',
+    title: 'Annual coverage',
+    shortLabel: 'Annual',
     subtitle: 'Lock in rates for stability',
   },
 ]
@@ -60,7 +62,7 @@ export default function TermSwitchSheet({ open, current, prices, onSelect, onClo
               const isCurrent = opt.id === current
               const btnLabel = isCurrent
                 ? 'Keep this plan'
-                : `Switch to ${opt.id === '6 month' ? '6 months' : '12 months'}`
+                : `Switch to ${opt.shortLabel}`
               return (
                 <div
                   key={opt.id}
