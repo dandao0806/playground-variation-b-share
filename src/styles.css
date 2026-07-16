@@ -4318,7 +4318,10 @@ button.welcome-card--link { background: var(--color-surface); }
   bottom: 0;
   width: 100%;
   max-width: 390px;
-  transform: translate(-50%, 100%);
+  /* Extra 50px of downward offset when closed pushes the sheet's upward
+     box-shadow (blur 32 + y-offset -10 = ~42px extent) fully outside the
+     frame; without it the shadow bleeds visibly above the footer bar. */
+  transform: translate(-50%, calc(100% + 50px));
   transition: transform 340ms cubic-bezier(0.16, 1, 0.3, 1);
   background: #ffffff;
   border-radius: 20px 20px 0 0;
